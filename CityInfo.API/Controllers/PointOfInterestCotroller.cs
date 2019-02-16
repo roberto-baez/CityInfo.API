@@ -1,4 +1,5 @@
 ﻿using CityInfo.API.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,10 @@ namespace CityInfo.API.Controllers
     {
 
         private ILogger<PointOfInterestCotroller> _logger;
-
         public PointOfInterestCotroller(ILogger<PointOfInterestCotroller> logger)
         {
             _logger = logger;
+           
         }
 
         [HttpGet("{cityId}/pointofinterest")]
@@ -48,7 +49,8 @@ namespace CityInfo.API.Controllers
         [HttpPost("{cityId}/pointofinterest")]
         public IActionResult CreatePointOfIterest(int cityId, [FromBody] PointOfIterestForCreationDto pointOfInterest) {
 
-            if (pointOfInterest == null || (!ModelState.IsValid))
+
+            if (pointOfInterest == null ||(!ModelState.IsValid))
             {
                 return BadRequest(ModelState);
             } 
