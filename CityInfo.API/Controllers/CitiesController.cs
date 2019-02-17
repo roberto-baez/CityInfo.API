@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using CityInfo.API.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +10,14 @@ namespace CityInfo.API.Controllers
     {
         [HttpGet]
         public ActionResult GetCities() {
-            var result = CitiesDataStore.current.Cities;
+            var result = CitiesDataStore.Current.Cities;
             return Ok(result); ;
 
         }
 
         [HttpGet("{id}", Name = "GetCity")]
         public ActionResult GetCity(int id) {
-            var result = CitiesDataStore.current.Cities.FirstOrDefault(c => c.Id == id);
+            var result = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
             if (result == null)
             {
                 return NotFound();
@@ -37,7 +34,7 @@ namespace CityInfo.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var MaxCityId = CitiesDataStore.current.Cities.Select(c => c.Id).Max();
+            var MaxCityId = CitiesDataStore.Current.Cities.Select(c => c.Id).Max();
 
             var FinalCity = new CityDto
             {
@@ -46,7 +43,7 @@ namespace CityInfo.API.Controllers
                 Description = city.Description
             };
 
-            CitiesDataStore.current.Cities.Add(FinalCity);
+            CitiesDataStore.Current.Cities.Add(FinalCity);
 
 
             return CreatedAtRoute("GetCity", new { id = FinalCity.Id }, FinalCity);
@@ -57,7 +54,7 @@ namespace CityInfo.API.Controllers
         public IActionResult UpdateCity(int cityid, [FromBody]  CityForCreation city)
         {
          
-            var  result = CitiesDataStore.current.Cities.FirstOrDefault(c => c.Id == cityid);
+            var  result = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityid);
 
             if (city == null || !ModelState.IsValid || result == null)
             {
@@ -74,7 +71,7 @@ namespace CityInfo.API.Controllers
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdateCity(int cityId,[FromBody] JsonPatchDocument<CityForCreation> patchdoc) {
 
-            var city = CitiesDataStore.current.Cities.FirstOrDefault(c => c.Id == cityId);
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
             if (patchdoc == null || city == null)
             {
@@ -102,14 +99,14 @@ namespace CityInfo.API.Controllers
 
         [HttpDelete("{id}")]
         public IActionResult DeleteCity(int id) {
-            var city = CitiesDataStore.current.Cities.FirstOrDefault(c => c.Id == id);
+            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == id);
 
             if (city == null)
             {
                 return NotFound();
             }
 
-            CitiesDataStore.current.Cities.Remove(city);
+            CitiesDataStore.Current.Cities.Remove(city);
             return NoContent();
 
             

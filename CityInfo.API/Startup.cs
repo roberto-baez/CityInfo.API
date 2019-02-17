@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -23,22 +19,31 @@ namespace CityInfo.API
             {
                 logging.AddConsole();
                 logging.AddDebug();
+                logging.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
+
             });
 
-            
+           
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env )//ILoggingBuilder loggerBuilder
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory )
         {
        
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+              
             }
+
+          
+            loggerFactory.AddConsole();
+            loggerFactory.AddDebug();
+        
+            loggerFactory.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
+
+          //  loggerBuilder.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
 
             app.UseStatusCodePages();
             app.UseMvc();
