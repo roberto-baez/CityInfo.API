@@ -1,5 +1,4 @@
 ﻿using CityInfo.API.Models;
-using FluentValidation;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

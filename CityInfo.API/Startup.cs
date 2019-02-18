@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace CityInfo.API
 {
@@ -14,16 +15,6 @@ namespace CityInfo.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddMvcOptions(o => o.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter()));
-
-            services.AddLogging(logging =>
-            {
-                logging.AddConsole();
-                logging.AddDebug();
-                logging.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
-
-            });
-
-           
 
         }
 
@@ -37,26 +28,12 @@ namespace CityInfo.API
               
             }
 
-          
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug();
-        
-            loggerFactory.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
-
-          //  loggerBuilder.AddProvider(new NLog.Extensions.Logging.NLogLoggerProvider());
+            loggerFactory.AddNLog();
 
             app.UseStatusCodePages();
             app.UseMvc();
 
-            //app.Run(async (context) =>
-            //{
-            //    throw new Exception("this is an example exeption");
-            //});
-
-            //app.Run(async (context) =>
-            //{
-            //    //await context.Response.WriteAsync("Hello World!!");
-            //});
+        
         }
     }
 }
