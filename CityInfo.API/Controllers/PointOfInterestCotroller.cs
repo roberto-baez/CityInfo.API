@@ -81,6 +81,7 @@ namespace CityInfo.API.Controllers
                 Description = pointOfInterest.Description
             };
 
+
             city.PointOfInterest.Add(FinalPointOfInterest);
 
             return CreatedAtRoute("GetPointOfinterest",
