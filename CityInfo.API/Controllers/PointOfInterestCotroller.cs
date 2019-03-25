@@ -22,7 +22,7 @@ namespace CityInfo.API.Controllers
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
             if (city == null)
             {
-                _logger.LogCritical($"The Given cityid #{cityId} was not found");
+                _logger.LogError($"The Given cityid #{cityId} was not found");
                 
                 return NotFound();
             }
@@ -31,16 +31,29 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpGet("{Cityid}/pointofinterest/{Id}", Name = "GetPointOfinterest")]
-        public IActionResult GetPointOfInterest(int cityId, int id)
+        public IActionResult GetPointOfInterest(int cityId, int poiId)
         {
             var result = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            var Poi = result.PointOfInterest.FirstOrDefault(p => p.Id == id);
-            if (result == null || Poi == null)
+           
+            if (result != null)
             {
-                return NotFound();
-            }
 
-            return Ok(Poi);
+                var Poi = result.PointOfInterest.FirstOrDefault(p => p.Id == poiId);
+
+                if (Poi == null)
+                {
+                    _logger.LogError($"The Given POIID #{poiId} was not found");
+                    return NotFound();
+                }
+                else {
+
+                    return Ok(Poi);
+                }
+
+            }
+            _logger.LogError($"The Given cityid #{cityId} was not found");
+            return NotFound();
+
         }
 
         [HttpPost("{cityId}/pointofinterest")]
@@ -55,6 +68,7 @@ namespace CityInfo.API.Controllers
                 var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
             if (city == null)
             {
+                _logger.LogError($"The Given cityid #{cityId} was not found");
                 return NotFound();
             }
 
@@ -75,7 +89,7 @@ namespace CityInfo.API.Controllers
 
 
         [HttpPut("{cityId}/pointofinterest/{id}")]
-        public IActionResult UpdatePointOfInterest(int cityId, int id,  [FromBody] PointOfIterestForCreationDto pointOfInterest) {
+        public IActionResult UpdatePointOfInterest(int cityId, int poiID,  [FromBody] PointOfIterestForCreationDto pointOfInterest) {
 
             if (pointOfInterest == null || (!ModelState.IsValid))
             {
@@ -83,9 +97,10 @@ namespace CityInfo.API.Controllers
             }
 
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-            var Poi = city.PointOfInterest.FirstOrDefault(p => p.Id == id);
+            var Poi = city.PointOfInterest.FirstOrDefault(p => p.Id == poiID);
             if (city == null || Poi == null)
             {
+                _logger.LogError($"The Given cityid #{cityId} was not found");
                 return NotFound();
             }
 
